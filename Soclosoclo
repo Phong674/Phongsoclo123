@@ -1,0 +1,721 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local rootPart = character:WaitForChild("HumanoidRootPart")
+local camera = workspace.CurrentCamera
+local userInput = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+-- KEY SYSTEM
+local KEY = "PHONGSOCLO"
+local enteredKey = ""
+local keyVerified = false
+
+local function verifyKey(input)
+    return input == KEY
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "KeySystem"
+screenGui.Parent = player.PlayerGui
+screenGui.ResetOnSpawn = false
+
+local keyFrame = Instance.new("Frame")
+keyFrame.Parent = screenGui
+keyFrame.Size = UDim2.new(0, 250, 0, 100)
+keyFrame.Position = UDim2.new(0.5, -125, 0.5, -50)
+keyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 35)
+keyFrame.BorderSizePixel = 0
+
+local keyTitle = Instance.new("TextLabel")
+keyTitle.Parent = keyFrame
+keyTitle.Size = UDim2.new(1, 0, 0, 25)
+keyTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+keyTitle.Text = "ENTER KEY"
+keyTitle.TextColor3 = Color3.fromRGB(255, 200, 50)
+keyTitle.Font = Enum.Font.GothamBold
+keyTitle.TextSize = 14
+
+local keyBox = Instance.new("TextBox")
+keyBox.Parent = keyFrame
+keyBox.Size = UDim2.new(0.8, 0, 0, 30)
+keyBox.Position = UDim2.new(0.1, 0, 0.35, 0)
+keyBox.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.PlaceholderText = "Enter Key"
+keyBox.Font = Enum.Font.GothamMedium
+keyBox.TextSize = 14
+keyBox.ClearTextOnFocus = true
+
+local keyBtn = Instance.new("TextButton")
+keyBtn.Parent = keyFrame
+keyBtn.Size = UDim2.new(0.4, 0, 0, 25)
+keyBtn.Position = UDim2.new(0.3, 0, 0.7, 0)
+keyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+keyBtn.Text = "Unlock"
+keyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBtn.Font = Enum.Font.GothamBold
+keyBtn.TextSize = 12
+
+local keyStatus = Instance.new("TextLabel")
+keyStatus.Parent = keyFrame
+keyStatus.Size = UDim2.new(1, 0, 0, 20)
+keyStatus.Position = UDim2.new(0, 0, 0.55, 0)
+keyStatus.BackgroundTransparency = 1
+keyStatus.Text = ""
+keyStatus.TextColor3 = Color3.fromRGB(255, 0, 0)
+keyStatus.Font = Enum.Font.GothamMedium
+keyStatus.TextSize = 11
+
+keyBtn.MouseButton1Click:Connect(function()
+    enteredKey = keyBox.Text
+    if verifyKey(enteredKey) then
+        keyVerified = true
+        keyStatus.Text = "Key Valid! Loading..."
+        keyStatus.TextColor3 = Color3.fromRGB(0, 255, 0)
+        task.wait(3)
+        screenGui:Destroy()
+        loadMainHub()
+    else
+        keyStatus.Text = "Invalid Key!"
+        keyStatus.TextColor3 = Color3.fromRGB(255, 0, 0)
+        keyBox.Text = ""
+    end
+end)
+
+local function loadMainHub()
+    -- MAIN HUB SCRIPT (TẤT CẢ CHỨC NĂNG Ở ĐÂY)
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "SuperHub"
+    screenGui.Parent = player.PlayerGui
+    screenGui.ResetOnSpawn = false
+
+    local toggleBtn = Instance.new("TextButton")
+    toggleBtn.Parent = screenGui
+    toggleBtn.Size = UDim2.new(0, 40, 0, 18)
+    toggleBtn.Position = UDim2.new(0.01, 0, 0.02, 0)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+    toggleBtn.Text = "H"
+    toggleBtn.TextColor3 = Color3.fromRGB(255, 200, 50)
+    toggleBtn.Font = Enum.Font.GothamBold
+    toggleBtn.TextSize = 12
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Parent = screenGui
+    mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+    mainFrame.BackgroundTransparency = 0.1
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Position = UDim2.new(0.01, 0, 0.06, 0)
+    mainFrame.Size = UDim2.new(0, 130, 0, 24)
+    mainFrame.Active = true
+    mainFrame.Draggable = true
+    mainFrame.ClipsDescendants = true
+    mainFrame.Visible = true
+
+    local title = Instance.new("TextButton")
+    title.Parent = mainFrame
+    title.Size = UDim2.new(1, 0, 1, 0)
+    title.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+    title.Text = "▼ Hub"
+    title.TextColor3 = Color3.fromRGB(255, 200, 50)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 13
+
+    local contentFrame = Instance.new("ScrollingFrame")
+    contentFrame.Parent = mainFrame
+    contentFrame.Size = UDim2.new(1, 0, 0, 0)
+    contentFrame.Position = UDim2.new(0, 0, 0, 24)
+    contentFrame.BackgroundTransparency = 1
+    contentFrame.ScrollBarThickness = 3
+    contentFrame.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 120)
+    contentFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    contentFrame.ClipsDescendants = true
+
+    local function createToggle(text, yPos, cb)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.92, 0, 0, 18)
+        btn.Position = UDim2.new(0.04, 0, 0, yPos)
+        btn.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+        btn.Text = text .. " [OFF]"
+        btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+        btn.Font = Enum.Font.GothamMedium
+        btn.TextSize = 10
+        btn.Parent = contentFrame
+        local state = false
+        btn.MouseButton1Click:Connect(function()
+            state = not state
+            btn.Text = text .. (state and " [ON]" or " [OFF]")
+            cb(state)
+        end)
+        return btn
+    end
+
+    local function createButton(text, yPos, cb)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.92, 0, 0, 18)
+        btn.Position = UDim2.new(0.04, 0, 0, yPos)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 75)
+        btn.Text = text
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.GothamMedium
+        btn.TextSize = 10
+        btn.Parent = contentFrame
+        btn.MouseButton1Click:Connect(cb)
+        return btn
+    end
+
+    local totalHeight = 4
+    local flyMenuFrame = nil
+    local espObjects = {}
+    local espNameLabels = {}
+    local playerViewFrame = nil
+    local followingPlayer = nil
+    local freecamState = false
+    local freecamMode = 1
+    local originalCamType = camera.CameraType
+    local freecamPos = CFrame.new(0, 10, 0)
+    local flyEnabled = false
+    local flySpeed = 1
+    local maxFlySpeed = 50
+    local bv = nil
+    local bg = nil
+    local ctrl = {f = 0, b = 0, l = 0, r = 0}
+    local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+    local speed = 0
+    local jumpEnabled = false
+    local autoJumpConnection = nil
+    local espEnabled = false
+    local spinEnabled = false
+    local spinSpeed = 30
+    local freecamMoveSpeed = 10
+    local slapHitboxEnabled = false
+    local flingEnabled = false
+
+    local function startFly()
+        if bv then bv:Destroy() end
+        if bg then bg:Destroy() end
+        local torso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
+        if not torso then return end
+        bg = Instance.new("BodyGyro", torso)
+        bg.P = 9e4
+        bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bg.cframe = torso.CFrame
+        bv = Instance.new("BodyVelocity", torso)
+        bv.velocity = Vector3.new(0, 0.1, 0)
+        bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+        humanoid.PlatformStand = true
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Running, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, false)
+        humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+        flyEnabled = true
+    end
+
+    local function stopFly()
+        if bv then bv:Destroy() bv = nil end
+        if bg then bg:Destroy() bg = nil end
+        humanoid.PlatformStand = false
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Running, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, true)
+        humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+        flyEnabled = false
+    end
+
+    local function createFlyMenu()
+        flyMenuFrame = Instance.new("Frame")
+        flyMenuFrame.Parent = screenGui
+        flyMenuFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
+        flyMenuFrame.BackgroundTransparency = 0.15
+        flyMenuFrame.BorderSizePixel = 0
+        flyMenuFrame.Position = UDim2.new(0.14, 0, 0.06, 0)
+        flyMenuFrame.Size = UDim2.new(0, 100, 0, 80)
+        flyMenuFrame.Visible = false
+        flyMenuFrame.Active = true
+        flyMenuFrame.Draggable = true
+        
+        local flyTitle = Instance.new("TextLabel")
+        flyTitle.Parent = flyMenuFrame
+        flyTitle.Size = UDim2.new(1, 0, 0, 16)
+        flyTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+        flyTitle.Text = "FLY"
+        flyTitle.TextColor3 = Color3.fromRGB(255, 200, 50)
+        flyTitle.Font = Enum.Font.GothamBold
+        flyTitle.TextSize = 11
+        
+        local flySpeedLabel = Instance.new("TextLabel")
+        flySpeedLabel.Parent = flyMenuFrame
+        flySpeedLabel.Position = UDim2.new(0.1, 0, 0.25, 0)
+        flySpeedLabel.Size = UDim2.new(0, 30, 0, 16)
+        flySpeedLabel.BackgroundColor3 = Color3.fromRGB(255, 85, 0)
+        flySpeedLabel.Text = "1"
+        flySpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        flySpeedLabel.Font = Enum.Font.GothamBold
+        flySpeedLabel.TextSize = 11
+        
+        local plusFly = Instance.new("TextButton")
+        plusFly.Parent = flyMenuFrame
+        plusFly.Position = UDim2.new(0.55, 0, 0.25, 0)
+        plusFly.Size = UDim2.new(0, 25, 0, 16)
+        plusFly.BackgroundColor3 = Color3.fromRGB(133, 145, 255)
+        plusFly.Text = "+"
+        plusFly.TextColor3 = Color3.fromRGB(0, 0, 0)
+        plusFly.Font = Enum.Font.GothamBold
+        plusFly.TextSize = 12
+        plusFly.MouseButton1Click:Connect(function()
+            flySpeed = math.min(flySpeed + 1, maxFlySpeed)
+            flySpeedLabel.Text = tostring(flySpeed)
+        end)
+        
+        local mineFly = Instance.new("TextButton")
+        mineFly.Parent = flyMenuFrame
+        mineFly.Position = UDim2.new(0.1, 0, 0.55, 0)
+        mineFly.Size = UDim2.new(0, 25, 0, 16)
+        mineFly.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+        mineFly.Text = "-"
+        mineFly.TextColor3 = Color3.fromRGB(0, 0, 0)
+        mineFly.Font = Enum.Font.GothamBold
+        mineFly.TextSize = 12
+        mineFly.MouseButton1Click:Connect(function()
+            flySpeed = math.max(flySpeed - 1, 1)
+            flySpeedLabel.Text = tostring(flySpeed)
+        end)
+        
+        local closeFly = Instance.new("TextButton")
+        closeFly.Parent = flyMenuFrame
+        closeFly.Position = UDim2.new(1, -16, 0, 2)
+        closeFly.Size = UDim2.new(0, 14, 0, 14)
+        closeFly.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+        closeFly.Text = "X"
+        closeFly.TextColor3 = Color3.fromRGB(255, 255, 255)
+        closeFly.Font = Enum.Font.GothamBold
+        closeFly.TextSize = 9
+        closeFly.MouseButton1Click:Connect(function()
+            flyMenuFrame.Visible = false
+        end)
+    end
+
+    createFlyMenu()
+
+    createToggle("Fly", totalHeight, function(s)
+        if s then
+            startFly()
+            if flyMenuFrame then flyMenuFrame.Visible = true end
+        else
+            stopFly()
+            if flyMenuFrame then flyMenuFrame.Visible = false end
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Invis", totalHeight, function(s)
+        local char = player.Character
+        if char then
+            for _, v in ipairs(char:GetDescendants()) do
+                if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("BasePart") then
+                    v.Transparency = s and 1 or 0
+                    if s then
+                        v.Material = Enum.Material.SmoothPlastic
+                        v.Color = Color3.fromRGB(255, 0, 255)
+                    end
+                end
+            end
+            if s then humanoid.WalkSpeed = 50 else humanoid.WalkSpeed = 16 end
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Noclip", totalHeight, function(s)
+        local char = player.Character
+        if char then
+            for _, v in ipairs(char:GetChildren()) do
+                if v:IsA("Part") or v:IsA("MeshPart") then
+                    v.CanCollide = not s
+                end
+            end
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Auto Jump", totalHeight, function(s)
+        jumpEnabled = s
+        if autoJumpConnection then 
+            autoJumpConnection:Disconnect() 
+            autoJumpConnection = nil
+        end
+        if s then
+            autoJumpConnection = RunService.Heartbeat:Connect(function()
+                if jumpEnabled then
+                    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end)
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    local function updateESP()
+        for _, v in ipairs(espObjects) do v:Destroy() end
+        for _, v in ipairs(espNameLabels) do v:Destroy() end
+        espObjects = {}
+        espNameLabels = {}
+        if not espEnabled then return end
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= player then
+                local char = p.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    local esp = Instance.new("BoxHandleAdornment")
+                    esp.Adornee = char.HumanoidRootPart
+                    esp.Size = Vector3.new(4, 6, 4)
+                    esp.Color3 = Color3.fromRGB(255, 0, 0)
+                    esp.AlwaysOnTop = true
+                    esp.ZIndex = 10
+                    esp.Transparency = 0.5
+                    esp.Parent = char.HumanoidRootPart
+                    table.insert(espObjects, esp)
+                    
+                    local label = Instance.new("BillboardGui")
+                    label.Parent = char.HumanoidRootPart
+                    label.Size = UDim2.new(0, 200, 0, 40)
+                    label.AlwaysOnTop = true
+                    label.Adornee = char.HumanoidRootPart
+                    local text = Instance.new("TextLabel")
+                    text.Parent = label
+                    text.Size = UDim2.new(1, 0, 1, 0)
+                    text.BackgroundTransparency = 1
+                    text.Text = p.Name
+                    text.TextColor3 = Color3.fromRGB(255, 255, 0)
+                    text.TextScaled = true
+                    text.Font = Enum.Font.GothamBold
+                    table.insert(espNameLabels, label)
+                end
+            end
+        end
+    end
+    createToggle("ESP", totalHeight, function(s)
+        espEnabled = s
+        if s then
+            updateESP()
+            RunService.Heartbeat:Connect(updateESP)
+        else
+            for _, v in ipairs(espObjects) do v:Destroy() end
+            for _, v in ipairs(espNameLabels) do v:Destroy() end
+            espObjects = {}
+            espNameLabels = {}
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Spin", totalHeight, function(s)
+        spinEnabled = s
+        if s then
+            task.spawn(function()
+                while spinEnabled do
+                    rootPart.CFrame = rootPart.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
+                    task.wait(0.01)
+                end
+            end)
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Teleport Slap", totalHeight, function(s)
+        slapHitboxEnabled = s
+    end)
+    totalHeight = totalHeight + 22
+
+    createToggle("Fling", totalHeight, function(s)
+        flingEnabled = s
+    end)
+    totalHeight = totalHeight + 22
+
+    createButton("Reset Player", totalHeight, function()
+        if playerViewFrame then playerViewFrame:Destroy() playerViewFrame = nil end
+        local frame = Instance.new("ScrollingFrame")
+        frame.Size = UDim2.new(0, 100, 0, 150)
+        frame.Position = UDim2.new(0.87, 0, 0.3, 0)
+        frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+        frame.BackgroundTransparency = 0.15
+        frame.BorderSizePixel = 0
+        frame.ScrollBarThickness = 3
+        frame.CanvasSize = UDim2.new(0, 0, 0, 0)
+        frame.ClipsDescendants = true
+        frame.Parent = screenGui
+        local title2 = Instance.new("TextLabel")
+        title2.Parent = frame
+        title2.Size = UDim2.new(1, 0, 0, 16)
+        title2.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+        title2.Text = "Players"
+        title2.TextColor3 = Color3.fromRGB(255, 255, 255)
+        title2.Font = Enum.Font.GothamBold
+        title2.TextSize = 11
+        local y = 20
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= player then
+                local btn = Instance.new("TextButton")
+                btn.Size = UDim2.new(0.9, 0, 0, 16)
+                btn.Position = UDim2.new(0.05, 0, 0, y)
+                btn.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+                btn.Text = p.Name
+                btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+                btn.Font = Enum.Font.GothamMedium
+                btn.TextSize = 9
+                btn.Parent = frame
+                btn.MouseButton1Click:Connect(function()
+                    followingPlayer = p
+                    if freecamState and freecamMode == 2 then
+                        local targetChar = p.Character
+                        if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                            freecamPos = targetChar.HumanoidRootPart.CFrame * CFrame.new(0, 3, 8)
+                            camera.CFrame = freecamPos
+                        end
+                    end
+                    frame:Destroy()
+                end)
+                y = y + 18
+            end
+        end
+        frame.CanvasSize = UDim2.new(0, 0, 0, y + 10)
+        local closeView = Instance.new("TextButton")
+        closeView.Size = UDim2.new(0.2, 0, 0, 14)
+        closeView.Position = UDim2.new(0.4, 0, 1, -16)
+        closeView.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+        closeView.Text = "X"
+        closeView.TextColor3 = Color3.fromRGB(255, 255, 255)
+        closeView.Font = Enum.Font.GothamBold
+        closeView.TextSize = 9
+        closeView.Parent = frame
+        closeView.MouseButton1Click:Connect(function()
+            frame:Destroy()
+        end)
+    end)
+    totalHeight = totalHeight + 22
+
+    createButton("Reset Cam", totalHeight, function()
+        freecamState = false
+        camera.CameraType = originalCamType or Enum.CameraType.Custom
+        freecamMode = 1
+        followingPlayer = nil
+        if playerViewFrame then playerViewFrame:Destroy() playerViewFrame = nil end
+    end)
+    totalHeight = totalHeight + 22
+
+    local freecamModeBtn = createButton("Freecam Own", totalHeight, function()
+        freecamMode = 1
+        freecamState = true
+        originalCamType = camera.CameraType
+        camera.CameraType = Enum.CameraType.Scriptable
+        freecamPos = camera.CFrame
+        freecamModeBtn.Text = "Freecam Own"
+    end)
+    totalHeight = totalHeight + 22
+
+    local freecamFollowBtn = createButton("Follow Player", totalHeight, function()
+        freecamMode = 2
+        freecamState = true
+        originalCamType = camera.CameraType
+        camera.CameraType = Enum.CameraType.Scriptable
+        if not playerViewFrame then
+            playerViewFrame = Instance.new("ScrollingFrame")
+            playerViewFrame.Parent = screenGui
+            playerViewFrame.Size = UDim2.new(0, 100, 0, 150)
+            playerViewFrame.Position = UDim2.new(0.87, 0, 0.06, 0)
+            playerViewFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+            playerViewFrame.BackgroundTransparency = 0.15
+            playerViewFrame.BorderSizePixel = 0
+            playerViewFrame.ScrollBarThickness = 3
+            playerViewFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+            playerViewFrame.ClipsDescendants = true
+            
+            local viewTitle = Instance.new("TextLabel")
+            viewTitle.Parent = playerViewFrame
+            viewTitle.Size = UDim2.new(1, 0, 0, 16)
+            viewTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+            viewTitle.Text = "Players"
+            viewTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+            viewTitle.Font = Enum.Font.GothamBold
+            viewTitle.TextSize = 11
+            
+            local playerListHeight = 20
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= player then
+                    local btn = Instance.new("TextButton")
+                    btn.Size = UDim2.new(0.9, 0, 0, 16)
+                    btn.Position = UDim2.new(0.05, 0, 0, playerListHeight)
+                    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+                    btn.Text = p.Name
+                    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    btn.Font = Enum.Font.GothamMedium
+                    btn.TextSize = 9
+                    btn.Parent = playerViewFrame
+                    btn.MouseButton1Click:Connect(function()
+                        followingPlayer = p
+                        if freecamState and freecamMode == 2 then
+                            local targetChar = p.Character
+                            if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                                freecamPos = targetChar.HumanoidRootPart.CFrame * CFrame.new(0, 3, 8)
+                                camera.CFrame = freecamPos
+                            end
+                        end
+                        playerViewFrame:Destroy()
+                        playerViewFrame = nil
+                    end)
+                    playerListHeight = playerListHeight + 18
+                end
+            end
+            playerViewFrame.CanvasSize = UDim2.new(0, 0, 0, playerListHeight + 10)
+            
+            local closeView = Instance.new("TextButton")
+            closeView.Size = UDim2.new(0.2, 0, 0, 14)
+            closeView.Position = UDim2.new(0.4, 0, 1, -16)
+            closeView.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+            closeView.Text = "X"
+            closeView.TextColor3 = Color3.fromRGB(255, 255, 255)
+            closeView.Font = Enum.Font.GothamBold
+            closeView.TextSize = 9
+            closeView.Parent = playerViewFrame
+            closeView.MouseButton1Click:Connect(function()
+                playerViewFrame:Destroy()
+                playerViewFrame = nil
+            end)
+        end
+        freecamFollowBtn.Text = "Follow Player"
+    end)
+    totalHeight = totalHeight + 22
+
+    local freecamFreeBtn = createButton("Freecam Move", totalHeight, function()
+        freecamMode = 3
+        freecamState = true
+        originalCamType = camera.CameraType
+        camera.CameraType = Enum.CameraType.Scriptable
+        freecamPos = camera.CFrame
+        freecamFreeBtn.Text = "Freecam Move"
+    end)
+    totalHeight = totalHeight + 22
+
+    createButton("Teleport", totalHeight, function()
+        if followingPlayer and followingPlayer.Character then
+            rootPart.CFrame = followingPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+            freecamState = false
+            camera.CameraType = originalCamType or Enum.CameraType.Custom
+            freecamMode = 1
+            if playerViewFrame then playerViewFrame:Destroy() playerViewFrame = nil end
+        end
+    end)
+    totalHeight = totalHeight + 22
+
+    contentFrame.CanvasSize = UDim2.new(0, 0, 0, totalHeight + 8)
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 16, 0, 16)
+    closeBtn.Position = UDim2.new(1, -18, 0, 4)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.TextSize = 9
+    closeBtn.Parent = mainFrame
+    closeBtn.MouseButton1Click:Connect(function()
+        mainFrame.Visible = false
+    end)
+
+    toggleBtn.MouseButton1Click:Connect(function()
+        mainFrame.Visible = not mainFrame.Visible
+    end)
+
+    local expanded = false
+    title.MouseButton1Click:Connect(function()
+        expanded = not expanded
+        mainFrame.Size = expanded and UDim2.new(0, 130, 0, totalHeight + 28) or UDim2.new(0, 130, 0, 24)
+        title.Text = expanded and "▲ Hub" or "▼ Hub"
+        contentFrame.Size = UDim2.new(1, 0, 0, math.max(totalHeight, 0))
+        contentFrame.CanvasSize = UDim2.new(0, 0, 0, totalHeight + 8)
+    end)
+
+    local freecamControlsFrame = nil
+    local function createFreecamControls()
+        if freecamControlsFrame then freecamControlsFrame:Destroy() end
+        freecamControlsFrame = Instance.new("Frame")
+        freecamControlsFrame.Parent = screenGui
+        freecamControlsFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
+        freecamControlsFrame.BackgroundTransparency = 0.3
+        freecamControlsFrame.BorderSizePixel = 0
+        freecamControlsFrame.Position = UDim2.new(0.85, 0, 0.3, 0)
+        freecamControlsFrame.Size = UDim2.new(0, 150, 0, 150)
+        freecamControlsFrame.Visible = false
+        
+        local up = Instance.new("TextButton")
+        up.Parent = freecamControlsFrame
+        up.Size = UDim2.new(0, 50, 0, 50)
+        up.Position = UDim2.new(0.33, 0, 0, 0)
+        up.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+        up.Text = "▲"
+        up.TextColor3 = Color3.fromRGB(255, 255, 255)
+        up.Font = Enum.Font.GothamBold
+        up.TextSize = 20
+        up.MouseButton1Click:Connect(function()
+            if freecamState and freecamMode == 3 then
+                freecamPos = freecamPos + Vector3.new(0, freecamMoveSpeed, 0)
+                camera.CFrame = freecamPos
+            end
+        end)
+        
+        local down = Instance.new("TextButton")
+        down.Parent = freecamControlsFrame
+        down.Size = UDim2.new(0, 50, 0, 50)
+        down.Position = UDim2.new(0.33, 0, 0.66, 0)
+        down.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+        down.Text = "▼"
+        down.TextColor3 = Color3.fromRGB(255, 255, 255)
+        down.Font = Enum.Font.GothamBold
+        down.TextSize = 20
+        down.MouseButton1Click:Connect(function()
+            if freecamState and freecamMode == 3 then
+                freecamPos = freecamPos - Vector3.new(0, freecamMoveSpeed, 0)
+                camera.CFrame = freecamPos
+            end
+        end)
+        
+        local left = Instance.new("TextButton")
+        left.Parent = freecamControlsFrame
+        left.Size = UDim2.new(0, 50, 0, 50)
+        left.Position = UDim2.new(0, 0, 0.33, 0)
+        left.BackgroundColor3 = Color3.fromRGB(50, 50, 80)
+        left.Text = "◄"
+        left.TextColor3 = Color3.fromRGB(255, 255, 255)
+        left.Font = Enum.Font.GothamBold
+        left.TextSize = 20
+        left.MouseButton1Click:Connect(function()
+            if freecamState and freecamMode == 3 then
+                freecamPos = freecamPos - camera.CFrame.RightVector * freecamMoveSpeed
+                camera.CFrame = freecamPos
+            end
+        end)
+        
+        local right = Instance.new("TextButton")
+        right.Parent = freecamControlsFrame
+        right
