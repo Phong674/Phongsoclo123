@@ -9,7 +9,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-      - uses: android-actions/setup-android@v2
       - run: chmod +x gradlew
       - run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
