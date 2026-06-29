@@ -1,4 +1,3 @@
-
 name: Phong APK
 on: push
 jobs:
@@ -13,7 +12,7 @@ jobs:
       - uses: android-actions/setup-android@v2
       - run: chmod +x gradlew
       - run: ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v4    # Đã nâng cấp lên v4
+      - uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
